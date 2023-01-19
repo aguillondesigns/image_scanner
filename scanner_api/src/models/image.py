@@ -1,5 +1,4 @@
 from db import get_db
-import base64
 import mysql.connector
 
 
@@ -10,7 +9,7 @@ class Image(object):
     image: str = None
     detection: bool = True
 
-    def __init__(this, id, title, objects, image, detection):
+    def __init__(this, id, title="", objects="", image="", detection=False):
         this.id = id
         this.title = title
         this.objects = objects

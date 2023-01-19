@@ -56,6 +56,7 @@ class RequestHandler:
             vision_response.log(create_data)
 
             image.objects = vision_response.objects
+            json["objects"] = image.objects
             if image.title is None or image.title == "":
                 image.title = f"{vision_response.names[0].lower()} {image.id}"
                 json["title"] = image.title
@@ -64,6 +65,7 @@ class RequestHandler:
         else:
             if image.title is None:
                 image.title = f"image {image.id}"
+                json["title"] = image.title
                 save_image = True
 
         if save_image:

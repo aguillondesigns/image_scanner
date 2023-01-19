@@ -3,11 +3,16 @@ from .image import Image
 
 
 class ImageService:
-    def get_images():
+    def get_images(ids: list = None):
         images: list = []
         db = get_db()
         cursor = db.cursor()
-        cursor.execute("select * from `images` where 1")
+        query = "select * from `images` where "
+        if ids is not None:
+            query += "`id` in (" + ",".join(ids) + ")"
+        else:
+            query += "1"
+        cursor.execute(query)
         results = cursor.fetchall()
         if len(results) > 0:
             for row in results:
@@ -17,6 +22,21 @@ class ImageService:
                 body: str = row[3]
                 detection: bool = row[4]
                 img = Image(id, title, objects, body, detection)
+                images.append(img)
+        return images
+
+    def get_image_objects():
+        images: list = []
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("select `id`,`objects` from `images` where 1")
+        results = cursor.fetchall()
+
+        if len(results) > 0:
+            for row in results:
+                id = row[0]
+                objects: str = "" if row[1] == None else row[1].split(",")
+                img = Image(id, None, objects, None, False)
                 images.append(img)
         return images
 
@@ -38,17 +58,27 @@ class ImageService:
         return None
 
     def filter_images(filter=None):
-        images = ImageService.get_images()
+        # our return data
         filtered = []
+
         if filter is not None:
+            # keep our payload minimal when searching
+            images = ImageService.get_image_objects()
             filters = ImageService.parse_filter(filter)
+            filtered_ids = []
             for f in filters:
                 for image in images:
                     if f in image.objects:
-                        filtered.append(image.serialize())
+                        filtered_ids.append(str(image.id))
+            # now that we have the ids we want, grab those
+            images = ImageService.get_images(filtered_ids)
         else:
-            for image in images:
-                filtered.append(image.serialize())
+            # no filter, get them all
+            images = ImageService.get_images()
+
+        # serialize our data
+        for image in images:
+            filtered.append(image.serialize())
 
         return filtered
 
