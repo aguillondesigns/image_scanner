@@ -22,7 +22,7 @@ spec:
                 key: db_password
 
           - name: PMA_HOST
-            value: scanner-db
+            value: scanner-db-service
 
         resources:
           limits:
