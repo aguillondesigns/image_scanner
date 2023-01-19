@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scanner-db
+spec:
+  selector:
+    matchLabels:
+      app: scanner-db
+  template:
+    metadata:
+      labels:
+        app: scanner-db
+    spec:
+      containers:
+      - name: scanner-db
+        image: scanner-db:latest
+        imagePullPolicy: Never
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secretdata
+                key: db_password
+        volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: scanner-volume
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 3306
+      volumes:
+        - name: scanner-volume
+          hostPath:
+            path: /run/desktop/mnt/host/c/coding/local_volume
+            type: Directory

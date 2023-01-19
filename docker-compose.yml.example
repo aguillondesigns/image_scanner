@@ -1,0 +1,38 @@
+services:
+  scanner-db:
+    container_name: scanner-db
+    image: scanner-db:latest
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: db_password
+    volumes:
+      - scanner_volume:/var/lib/mysql/
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      MYSQL_ROOT_PASSWORD: db_password
+      PMA_HOST: scanner-db
+
+  scanner-api:
+    container_name: scanner-api
+    image: scanner-api:latest
+    ports:
+      - 5000:5000
+    environment:
+      - VISION_API=https://vision.googleapis.com/v1/images:annotate?key=
+      - VISION_APIKEY=vision_apikey
+      - DB_HOST=scanner-db
+      - DB_USER=db_user
+      - DB_PASSWORD=db_password
+      - DB_DATABASE=scanner_db
+
+volumes:
+  scanner_volume:
+

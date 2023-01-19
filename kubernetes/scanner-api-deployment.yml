@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scanner-api
+spec:
+  selector:
+    matchLabels:
+      app: scanner-api
+  template:
+    metadata:
+      labels:
+        app: scanner-api
+    spec:
+      containers:
+      - name: scanner-api
+        image: scanner-api:latest
+        imagePullPolicy: Never
+        env:
+          - name: VISION_API
+            value: https://vision.googleapis.com/v1/images:annotate?key=
+
+          - name: VISION_APIKEY
+            valueFrom:
+              secretKeyRef:
+                name: secretdata
+                key: vision_apikey
+
+          - name: DB_HOST
+            value: scanner-db
+
+          - name: DB_DATABASE
+            value: scanner_db
+
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: secretdata
+                key: db_user
+          
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secretdata
+                key: db_password
+
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
