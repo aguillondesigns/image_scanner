@@ -46,7 +46,7 @@ Depending on your deployment you will be using different sets of ports:
 
 **Kubernetes** uses `locahost:30000` for the api and `localhost:30001` for phpmyadmin.
 
-Note** - The db port 3306 is exposed locally for Docker Compose, but it does not have a node port assigned for the Kubernetes setup.
+**Note** - The db port 3306 is exposed locally for Docker Compose, but it does not have a node port assigned for the Kubernetes setup.
 
 ### Get Requests
 Response Structure:
@@ -56,9 +56,10 @@ Response Structure:
     "image" : "base 64 encoded image data",
     "objects" : "comma,separated,values,for,searching",
     "title" : "title supplied or generated",
-    "use_detection" : 0 | 1 - "depending on post request"
+    "use_detection" : true
 }
 ```
+
 - `localhost:[port]/images` - Returns all available images
 - `localhost:[port]/images/[id]` - Returns a specific image
 - `localhost:[port]/images?objects=cat,dog` - Returns all images where objects supplied are found
