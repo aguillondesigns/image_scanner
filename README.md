@@ -23,7 +23,7 @@ The other environment variables in the file should be left alone as they are spe
 
  We are using secrets of type `data` and they should be base64 encoded before placed in this file.
 
-`scanner-db-deployment.yml` This file is pretty much already setup, but there is one item that we need to adjust. We are using the `hostPath` method for volume storage which is pointing to a phsical location on the node. Kubernetes supports a slew of different [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) for you to use. For the sake of simplicity, we are using a local storage path of `C:\coding\local_volume`, please note the structure of the path in the yaml file: `/run/desktop/mnt/host/c/coding/local_volume` the **/run/desktop/mnt/host** is needed for this to work.
+`scanner-db-deployment.yml` This file is pretty much already setup, but there is one item that we need to adjust. We are using the `hostPath` method for volume storage which is pointing to a physical location on the node. Kubernetes supports a slew of different [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) for you to use. For the sake of simplicity, we are using a local storage path of `C:\coding\local_volume`, please note the structure of the path in the yaml file: `/run/desktop/mnt/host/c/coding/local_volume` the **/run/desktop/mnt/host** is needed for this to work.
 
 ### Container Creation
 Now that you have the your `docker-compose.yml` or your `secret.yml` configured, you are ready to roll.
